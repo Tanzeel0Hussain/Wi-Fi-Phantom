@@ -1,95 +1,190 @@
-# Wi-Fi Phantom v2.0 🛡️💻
+# Wi-Fi Phantom
 
-**Wi-Fi Phantom v2.0** is a professional-grade WiFi security testing tool developed for the **ESP32** (specifically optimized for **ESP32-C3**). It combines a powerful **Deauthenticator** with a sophisticated **Evil Twin (Captive Portal)** attack to demonstrate WiFi vulnerabilities for educational and security auditing purposes.
+[![Firmware Build](https://github.com/Tanzeel0Hussain/Wi-Fi-Phantom/actions/workflows/firmware.yml/badge.svg)](https://github.com/Tanzeel0Hussain/Wi-Fi-Phantom/actions/workflows/firmware.yml)
+[![Live Installer](https://img.shields.io/badge/Live-Web%20Installer-2563eb?logo=github)](https://tanzeel0hussain.github.io/Wi-Fi-Phantom/)
+[![Firmware](https://img.shields.io/badge/Download-ESP32--C3%20Firmware-16a34a?logo=espressif)](https://github.com/Tanzeel0Hussain/Wi-Fi-Phantom/releases)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
----
+**Wi-Fi Phantom v3.0** is a defensive ESP32-C3 wireless visibility project. It passively inventories nearby Wi-Fi networks, highlights review-worthy duplicate SSIDs and scan-to-scan changes, and serves a responsive local dashboard from the device.
 
-## ⚡ Features
+> **Current main branch:** no client deauthentication, third-party access-point impersonation, or Wi-Fi credential collection.
 
-### 🖥️ Admin Dashboard (Attacker Side)
-- **Hacker Aesthetic**: A sleek, Cyberpunk-themed management interface.
-- **Real-time Scanner**: Scans all nearby 2.4GHz networks.
-- **Signal Indicators**: Visual RSSI signal bars (▂▄▆█) for accurate targeting.
-- **Mobile Responsive**: Fully optimized for smartphones and tablets.
+## Quick Links
 
-### 🌐 User Portal (Victim Side)
-- **Professional Design**: A modern, clean "Wireless Gateway" login page that mimics real router admin panels.
-- **Credential Harvesting**: Securely captures and stores WiFi passwords.
-- **Automatic Redirect**: Uses a DNS Captive Portal to redirect users to the login page automatically.
+- **[Open Live Web Installer](https://tanzeel0hussain.github.io/Wi-Fi-Phantom/)**
+- **[Download Latest Firmware](https://github.com/Tanzeel0Hussain/Wi-Fi-Phantom/releases)**
+- **[View Firmware Builds](https://github.com/Tanzeel0Hussain/Wi-Fi-Phantom/actions)**
+- **[Read Security Guidance](SECURITY.md)**
+- **[Browse Source Code](firmware/src)**
 
-### ⚔️ Deauther Logic
-- **High-Frequency Bursts**: Sends Deauth and Disassociation frames every 100ms.
-- **Burst Mode**: Fires multiple packets per cycle to maximize the success rate.
-- **Multi-Interface Injection**: Uses the ESP32 Station interface for reliable frame injection.
+## What It Shows
 
----
+| Observation | Purpose |
+| --- | --- |
+| SSID | Advertised Wi-Fi network name |
+| BSSID | Access-point radio MAC address |
+| Channel | Current 2.4 GHz channel |
+| RSSI | Observed signal strength |
+| Security mode | Advertised authentication mode |
+| Open network | Highlights networks advertising no Wi-Fi authentication |
+| Duplicate SSID | Marks the same SSID seen from multiple BSSIDs for review |
+| Channel/security change | Compares the same BSSID with the previous scan |
 
-## 🚀 Getting Started
+A duplicate SSID is **not automatically a rogue access point**. Mesh Wi-Fi, extenders and enterprise deployments commonly advertise the same SSID from several BSSIDs.
 
-### Prerequisites
-- **Hardware**: ESP32-C3 (or any ESP32 series board).
-- **Drivers**: If your PC doesn't detect the ESP32 port, install the provided drivers.
-- **Software**: Arduino IDE (Download from [arduino.cc](https://www.arduino.cc/en/software)).
+## Features
 
-### 1. Windows Driver Installation
-If you are using Windows and your board's COM port is not detected:
-1. Locate `CP210x_Windows_Drivers.zip` in this folder.
-2. Extract the ZIP file.
-3. Run `CP210xVCPInstaller_x64.exe` (for 64-bit Windows) or `CP210xVCPInstaller_x86.exe` (for 32-bit).
-4. Follow the installation wizard. Once finished, reconnect your ESP32.
+- Passive nearby Wi-Fi scanning
+- ESP32-C3 focused firmware
+- SSID, BSSID, RSSI and channel inventory
+- Advertised security-mode visibility
+- Open-network warning
+- Duplicate-SSID review flag
+- Channel/security change observations between scans
+- Responsive local device dashboard
+- Automatic scan refresh every 30 seconds
+- Manual **Scan now** control
+- PlatformIO project structure
+- GitHub Actions firmware compilation
+- Browser firmware installation with ESP Web Tools
+- Downloadable full-flash firmware image
 
-### 2. Arduino IDE Configuration
-1. Open **Arduino IDE**.
-2. Go to **File > Preferences**.
-3. In the "Additional Boards Manager URLs" field, paste this link:
-   `https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json`
-4. Click **OK**.
-5. Go to **Tools > Board > Boards Manager...**
-6. Search for `esp32` and click **Install** for the "esp32 by Espressif Systems" package.
-7. After installation, go to **Tools > Board > esp32** and select **ESP32C3 Dev Module** (or the specific board you are using).
-8. Select the correct **Port** under **Tools > Port**.
+## Browser Installation
 
-### 3. Installation
-1. Clone or download this repository.
-2. Open `Wi-Fi-Phantom.ino` in Arduino IDE.
-3. Click the **Upload** button (arrow icon) to flash the firmware to your ESP32.
+For the simplest setup, use **[Open Live Web Installer](https://tanzeel0hussain.github.io/Wi-Fi-Phantom/)**.
 
----
+1. Connect a supported ESP32-C3 development board using a **data-capable USB cable**.
+2. Open the installer in desktop Chrome or Microsoft Edge.
+3. Click the install button.
+4. Approve the serial device selected in your browser.
+5. Wait for flashing to complete and reboot the board.
 
-## 🛠️ Usage
+The website cannot silently access your serial device; browser permission is always required.
 
-1. **Power on** your ESP32.
-2. **Connect** to the management WiFi:
-   - **SSID**: `TP-Link_3473`
-   - **Password**: `Password`
-3. **Open Browser**: Go to `192.168.4.1` or `http://start.com`.
-4. **Select Target**: Scan for nearby networks and select your target AP.
-5. **Execute**:
-   - Start **Deauther** to disconnect users from the original network.
-   - Start **Evil Twin** to launch the fake access point.
-6. **Capture**: Wait for users to enter their credentials on the professional-looking portal.
+## After Installation
 
----
+1. Power or reboot the ESP32-C3.
+2. Connect your phone/laptop to **`Wi-Fi-Phantom-Monitor`**.
+3. Use password **`phantomsecure`**.
+4. Open **[Local Device Dashboard](http://192.168.4.1)**.
+5. Press **Scan now** whenever you want a fresh observation.
 
-## ⚠️ Important Note on PMF (802.11w)
+The dashboard also refreshes automatically.
 
-If the target router uses **Protected Management Frames (PMF)** (common in WPA3 and modern WPA2 routers), the deauthentication attack may fail as management frames are encrypted. This tool is designed to demonstrate vulnerabilities on non-PMF or legacy networks.
+## Manual Firmware
 
----
+The CI pipeline creates a full ESP32-C3 flash image containing the bootloader, partition table, boot application metadata and application firmware.
 
-## 📜 Disclaimer
+Use **[Download Latest Firmware](https://github.com/Tanzeel0Hussain/Wi-Fi-Phantom/releases)** if you prefer manual flashing.
 
-**For Educational Purposes Only.**
-The use of this tool for attacking networks without prior mutual consent is illegal. It is the end user's responsibility to obey all applicable local, state, and federal laws. Developers assume no liability and are not responsible for any misuse or damage caused by this program.
+## Build from Source
 
----
+Requirements:
 
-## 🤝 Contributing
+- Python 3
+- PlatformIO CLI or PlatformIO IDE
+- ESP32-C3 development board compatible with the `esp32-c3-devkitm-1` PlatformIO target
 
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/Tanzeel0Hussain/Wi-Fi-Phantom/issues).
+Clone and build:
 
----
+```bash
+git clone https://github.com/Tanzeel0Hussain/Wi-Fi-Phantom.git
+cd Wi-Fi-Phantom
+pio run -e esp32c3
+```
 
-## ⭐️ Support
+The application binary is produced under:
 
-If you found this project helpful, please give it a **Star** on GitHub!
+```text
+.pio/build/esp32c3/firmware.bin
+```
+
+Upload directly through PlatformIO:
+
+```bash
+pio run -e esp32c3 -t upload
+```
+
+## Repository Structure
+
+```text
+Wi-Fi-Phantom/
+├── .github/
+│   └── workflows/
+│       └── firmware.yml
+├── docs/
+│   ├── firmware/
+│   │   └── wifi-phantom-esp32c3-full.bin
+│   ├── index.html
+│   └── manifest.json
+├── firmware/
+│   ├── include/
+│   │   ├── dashboard.h
+│   │   ├── network_model.h
+│   │   └── scanner.h
+│   └── src/
+│       ├── dashboard.cpp
+│       ├── main.cpp
+│       └── scanner.cpp
+├── platformio.ini
+├── SECURITY.md
+├── LICENSE
+└── README.md
+```
+
+## Firmware Architecture
+
+```text
+ESP32-C3
+   │
+   ├── Passive Wi-Fi Scanner
+   │      └── SSID / BSSID / RSSI / Channel / Security
+   │
+   ├── Observation Engine
+   │      ├── Open network warning
+   │      ├── Duplicate SSID review
+   │      └── Channel/security change comparison
+   │
+   └── Local Dashboard
+          └── Wi-Fi-Phantom-Monitor → 192.168.4.1
+```
+
+## Automated Firmware Pipeline
+
+Every relevant push to `main` automatically:
+
+1. Installs PlatformIO.
+2. Compiles the ESP32-C3 firmware.
+3. Creates a full browser-installable flash image.
+4. Uploads the binary as a GitHub Actions artifact.
+5. Updates the firmware used by the live Web Installer.
+6. Publishes or updates the GitHub firmware Release.
+
+## Safety and Interpretation
+
+Wi-Fi Phantom is intended for your own hardware, classroom labs and explicitly authorized wireless observation.
+
+Dashboard flags are **observations, not conclusions**. For example, a duplicate SSID may be expected in a mesh system. Always compare results with your known AP inventory and network design.
+
+See **[Security and Responsible Use](SECURITY.md)** for details.
+
+## USB Driver Note
+
+USB-UART support depends on the board and USB interface. Use the official vendor driver for the specific CP210x, CH340/CH341 or other bridge used by your board rather than storing third-party driver packages inside this repository.
+
+## Roadmap
+
+- Known-network baseline profiles
+- Channel distribution summary
+- Observation history
+- Optional OLED status display
+- Additional tested ESP32-C3 board profiles
+- Hardware screenshots and wiring notes
+
+## License
+
+Released under the **[MIT License](LICENSE)**.
+
+## Maintainer
+
+**[Tanzeel Hussain](https://github.com/Tanzeel0Hussain)**
