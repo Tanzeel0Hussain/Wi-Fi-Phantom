@@ -11,7 +11,7 @@ String escapeHtml(String value) {
   value.replace("&", "&amp;");
   value.replace("<", "&lt;");
   value.replace(">", "&gt;");
-  value.replace(""", "&quot;");
+  value.replace("\"", "&quot;");
   value.replace("'", "&#39;");
   return value;
 }
