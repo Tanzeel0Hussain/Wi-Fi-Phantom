@@ -1,0 +1,16 @@
+{
+  "name": "Wi-Fi Phantom — ESP32-C3 Wireless Security Monitor",
+  "version": "3.0.0",
+  "new_install_prompt_erase": true,
+  "builds": [
+    {
+      "chipFamily": "ESP32-C3",
+      "parts": [
+        {
+          "path": "firmware/wifi-phantom-esp32c3-full.bin",
+          "offset": 0
+        }
+      ]
+    }
+  ]
+}
