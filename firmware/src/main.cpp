@@ -11,19 +11,11 @@ unsigned long lastScanMs = 0;
 }
 
 void setup() {
-  Serial.begin(115200);
   delay(300);
 
   WiFi.mode(WIFI_AP_STA);
   WiFi.setSleep(false);
   WiFi.softAP(AP_SSID, AP_PASSWORD);
-
-  Serial.println();
-  Serial.println("Wi-Fi Phantom defensive monitor");
-  Serial.print("Monitor AP: ");
-  Serial.println(AP_SSID);
-  Serial.print("Dashboard IP: ");
-  Serial.println(WiFi.softAPIP());
 
   performNetworkScan();
   lastScanMs = millis();
