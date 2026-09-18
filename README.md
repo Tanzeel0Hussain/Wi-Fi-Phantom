@@ -1,91 +1,73 @@
-# Wi-Fi Phantom
+# Wi-Fi Phantom — ESP32-C3 Wireless Security Monitor
 
 [![Firmware Build](https://github.com/Tanzeel0Hussain/Wi-Fi-Phantom/actions/workflows/firmware.yml/badge.svg)](https://github.com/Tanzeel0Hussain/Wi-Fi-Phantom/actions/workflows/firmware.yml)
 [![Live Installer](https://img.shields.io/badge/Live-Web%20Installer-2563eb?logo=github)](https://tanzeel0hussain.github.io/Wi-Fi-Phantom/)
-[![Firmware](https://img.shields.io/badge/Download-ESP32--C3%20Firmware-16a34a?logo=espressif)](https://github.com/Tanzeel0Hussain/Wi-Fi-Phantom/releases)
+[![Firmware](https://img.shields.io/badge/Download-Firmware-16a34a?logo=espressif)](https://github.com/Tanzeel0Hussain/Wi-Fi-Phantom/releases/latest)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-**Wi-Fi Phantom v3.0** is a defensive ESP32-C3 wireless visibility project. It passively inventories nearby Wi-Fi networks, highlights review-worthy duplicate SSIDs and scan-to-scan changes, and serves a responsive local dashboard from the device.
+**Wi-Fi Phantom** is a defensive ESP32-C3 wireless visibility project. The maintained firmware passively scans nearby 2.4 GHz Wi-Fi networks and presents observations through a responsive dashboard hosted by the board.
 
-> **Current main branch:** no client deauthentication, third-party access-point impersonation, or Wi-Fi credential collection.
+> **Defensive scope:** the maintained firmware does not disconnect clients, impersonate third-party access points, or collect Wi-Fi credentials.
 
 ## Quick Links
 
 - **[Open Live Web Installer](https://tanzeel0hussain.github.io/Wi-Fi-Phantom/)**
-- **[Download Latest Firmware](https://github.com/Tanzeel0Hussain/Wi-Fi-Phantom/releases)**
-- **[View Firmware Builds](https://github.com/Tanzeel0Hussain/Wi-Fi-Phantom/actions)**
-- **[Read Security Guidance](SECURITY.md)**
+- **[Download Latest Firmware](https://github.com/Tanzeel0Hussain/Wi-Fi-Phantom/releases/latest)**
+- **[View Build Status](https://github.com/Tanzeel0Hussain/Wi-Fi-Phantom/actions)**
 - **[Browse Source Code](firmware/src)**
+- **[Responsible-Use Guidance](SECURITY.md)**
 
-## What It Shows
-
-| Observation | Purpose |
-| --- | --- |
-| SSID | Advertised Wi-Fi network name |
-| BSSID | Access-point radio MAC address |
-| Channel | Current 2.4 GHz channel |
-| RSSI | Observed signal strength |
-| Security mode | Advertised authentication mode |
-| Open network | Highlights networks advertising no Wi-Fi authentication |
-| Duplicate SSID | Marks the same SSID seen from multiple BSSIDs for review |
-| Channel/security change | Compares the same BSSID with the previous scan |
-
-A duplicate SSID is **not automatically a rogue access point**. Mesh Wi-Fi, extenders and enterprise deployments commonly advertise the same SSID from several BSSIDs.
-
-## Features
+## Current Features
 
 - Passive nearby Wi-Fi scanning
-- ESP32-C3 focused firmware
-- SSID, BSSID, RSSI and channel inventory
-- Advertised security-mode visibility
-- Open-network warning
-- Duplicate-SSID review flag
-- Channel/security change observations between scans
-- Responsive local device dashboard
-- Automatic scan refresh every 30 seconds
-- Manual **Scan now** control
+- SSID and BSSID inventory
+- RSSI and 2.4 GHz channel visibility
+- Advertised security-mode identification
+- Open-network warnings
+- Duplicate-SSID observations for manual review
+- Channel/security changes between scans
+- Responsive ESP32-C3 local dashboard
+- Device information and free-heap visibility
 - PlatformIO project structure
-- GitHub Actions firmware compilation
-- Browser firmware installation with ESP Web Tools
-- Downloadable full-flash firmware image
+- Browser-based firmware installation
+- Automated firmware build and downloadable release
+
+> A duplicate SSID is **not automatically a rogue access point**. Mesh systems, extenders and enterprise deployments commonly advertise one SSID from multiple BSSIDs. Wi-Fi Phantom reports observations; the operator decides whether they are expected.
 
 ## Browser Installation
 
-For the simplest setup, use **[Open Live Web Installer](https://tanzeel0hussain.github.io/Wi-Fi-Phantom/)**.
+Use **[Install Wi-Fi Phantom](https://tanzeel0hussain.github.io/Wi-Fi-Phantom/)** for the easiest setup.
 
-1. Connect a supported ESP32-C3 development board using a **data-capable USB cable**.
+1. Connect the ESP32-C3 with a data-capable USB cable.
 2. Open the installer in desktop Chrome or Microsoft Edge.
-3. Click the install button.
-4. Approve the serial device selected in your browser.
-5. Wait for flashing to complete and reboot the board.
+3. Click **Install Wi-Fi Phantom**.
+4. Approve the serial device requested by the browser.
+5. Wait for flashing to finish, then restart the board.
 
-The website cannot silently access your serial device; browser permission is always required.
+The browser always requires the user to approve serial-device access.
 
 ## After Installation
 
-1. Power or reboot the ESP32-C3.
-2. Connect your phone/laptop to **`Wi-Fi-Phantom-Monitor`**.
-3. Use password **`phantomsecure`**.
-4. Open **[Local Device Dashboard](http://192.168.4.1)**.
+1. Restart the ESP32-C3.
+2. Connect to **Wi-Fi-Phantom-Monitor**.
+3. Enter password **phantomsecure**.
+4. Open **[Device Dashboard](http://192.168.4.1)**.
 5. Press **Scan now** whenever you want a fresh observation.
 
-The dashboard also refreshes automatically.
+## What the Dashboard Shows
 
-## Manual Firmware
-
-The CI pipeline creates a full ESP32-C3 flash image containing the bootloader, partition table, boot application metadata and application firmware.
-
-Use **[Download Latest Firmware](https://github.com/Tanzeel0Hussain/Wi-Fi-Phantom/releases)** if you prefer manual flashing.
+| Field | Purpose |
+| --- | --- |
+| SSID | Advertised network name |
+| BSSID | Access-point MAC address |
+| Channel | Observed 2.4 GHz channel |
+| RSSI | Observed signal strength |
+| Security | Advertised Wi-Fi security mode |
+| Observation | Open, duplicate SSID, changed channel/security, or normal observation |
 
 ## Build from Source
 
-Requirements:
-
-- Python 3
-- PlatformIO CLI or PlatformIO IDE
-- ESP32-C3 development board compatible with the `esp32-c3-devkitm-1` PlatformIO target
-
-Clone and build:
+Requirements: Python 3, PlatformIO, and a compatible ESP32-C3 development board.
 
 ```bash
 git clone https://github.com/Tanzeel0Hussain/Wi-Fi-Phantom.git
@@ -93,28 +75,19 @@ cd Wi-Fi-Phantom
 pio run -e esp32c3
 ```
 
-The application binary is produced under:
-
-```text
-.pio/build/esp32c3/firmware.bin
-```
-
-Upload directly through PlatformIO:
+Upload through PlatformIO:
 
 ```bash
 pio run -e esp32c3 -t upload
 ```
 
-## Repository Structure
+## Project Structure
 
 ```text
 Wi-Fi-Phantom/
-├── .github/
-│   └── workflows/
-│       └── firmware.yml
+├── .github/workflows/firmware.yml
 ├── docs/
 │   ├── firmware/
-│   │   └── wifi-phantom-esp32c3-full.bin
 │   ├── index.html
 │   └── manifest.json
 ├── firmware/
@@ -132,7 +105,7 @@ Wi-Fi-Phantom/
 └── README.md
 ```
 
-## Firmware Architecture
+## Firmware Design
 
 ```text
 ESP32-C3
@@ -141,44 +114,28 @@ ESP32-C3
    │      └── SSID / BSSID / RSSI / Channel / Security
    │
    ├── Observation Engine
-   │      ├── Open network warning
-   │      ├── Duplicate SSID review
-   │      └── Channel/security change comparison
+   │      └── Open / Duplicate SSID / Changed properties
    │
-   └── Local Dashboard
-          └── Wi-Fi-Phantom-Monitor → 192.168.4.1
+   └── Local Web Dashboard
+          └── Browser at 192.168.4.1
 ```
 
-## Automated Firmware Pipeline
+## Safety and Scope
 
-Every relevant push to `main` automatically:
+Use Wi-Fi Phantom only with hardware and wireless environments you own or are explicitly authorized to assess. The current project is designed for visibility, learning and defensive review rather than disruption or credential collection.
 
-1. Installs PlatformIO.
-2. Compiles the ESP32-C3 firmware.
-3. Creates a full browser-installable flash image.
-4. Uploads the binary as a GitHub Actions artifact.
-5. Updates the firmware used by the live Web Installer.
-6. Publishes or updates the GitHub firmware Release.
-
-## Safety and Interpretation
-
-Wi-Fi Phantom is intended for your own hardware, classroom labs and explicitly authorized wireless observation.
-
-Dashboard flags are **observations, not conclusions**. For example, a duplicate SSID may be expected in a mesh system. Always compare results with your known AP inventory and network design.
-
-See **[Security and Responsible Use](SECURITY.md)** for details.
+See **[SECURITY.md](SECURITY.md)** for details.
 
 ## USB Driver Note
 
-USB-UART support depends on the board and USB interface. Use the official vendor driver for the specific CP210x, CH340/CH341 or other bridge used by your board rather than storing third-party driver packages inside this repository.
+USB-UART support depends on the bridge used by your board. Use the official driver supplied by the board/USB-bridge manufacturer rather than keeping third-party driver archives in this repository.
 
 ## Roadmap
 
-- Known-network baseline profiles
-- Channel distribution summary
-- Observation history
-- Optional OLED status display
-- Additional tested ESP32-C3 board profiles
+- Known-network allowlist for more useful duplicate-SSID review
+- Channel-distribution summary
+- Optional local event history
+- Additional tested ESP32-C3 boards
 - Hardware screenshots and wiring notes
 
 ## License
@@ -187,4 +144,4 @@ Released under the **[MIT License](LICENSE)**.
 
 ## Maintainer
 
-**[Tanzeel Hussain](https://github.com/Tanzeel0Hussain)**
+**Tanzeel Hussain** · **[GitHub Profile](https://github.com/Tanzeel0Hussain)**
