@@ -1,0 +1,96 @@
+name: Build Wi-Fi Phantom Firmware
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - 'docs/firmware/**'
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: wifi-phantom-firmware-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install PlatformIO
+        run: pip install platformio
+
+      - name: Compile ESP32-C3 firmware
+        run: pio run -e esp32c3
+
+      - name: Create browser-installable full image
+        run: |
+          BOOT_APP0="$HOME/.platformio/packages/framework-arduinoespressif32/tools/partitions/boot_app0.bin"
+          ESPTOOL="$HOME/.platformio/packages/tool-esptoolpy/esptool.py"
+
+          python "$ESPTOOL" --chip esp32c3 merge_bin             -o wifi-phantom-esp32c3-full.bin             --flash_mode dio             --flash_freq 80m             --flash_size 4MB             0x0 .pio/build/esp32c3/bootloader.bin             0x8000 .pio/build/esp32c3/partitions.bin             0xe000 "$BOOT_APP0"             0x10000 .pio/build/esp32c3/firmware.bin
+
+          mkdir -p docs/firmware
+          cp wifi-phantom-esp32c3-full.bin docs/firmware/wifi-phantom-esp32c3-full.bin
+
+      - name: Upload firmware artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: wifi-phantom-esp32c3-firmware
+          path: wifi-phantom-esp32c3-full.bin
+
+      - name: Update firmware used by web installer
+        if: github.event_name != 'pull_request'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f docs/firmware/wifi-phantom-esp32c3-full.bin
+          if git diff --cached --quiet; then
+            echo "Firmware binary is already current."
+          else
+            git commit -m "build: update browser-installable ESP32-C3 firmware [skip ci]"
+            git push
+          fi
+
+      - name: Publish defensive firmware release
+        if: github.event_name != 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cat > release-notes.md <<'EOF'
+          ## Wi-Fi Phantom v3.0.0 — ESP32-C3 Wireless Security Monitor
+
+          Defensive firmware focused on passive Wi-Fi visibility and review-oriented observations.
+
+          ### Current capabilities
+          - Passive nearby Wi-Fi scanning
+          - SSID, BSSID, RSSI, channel and security-mode visibility
+          - Open-network warnings
+          - Duplicate-SSID observations with false-positive guidance
+          - Channel/security change observations between scans
+          - Responsive local dashboard hosted by the ESP32-C3
+          - Browser installation through ESP Web Tools
+
+          This release does not disconnect clients, impersonate third-party access points, or collect Wi-Fi credentials.
+          EOF
+
+          if gh release view wifi-phantom-v3 >/dev/null 2>&1; then
+            gh release edit wifi-phantom-v3               --title "Wi-Fi Phantom v3.0.0 — ESP32-C3 Wireless Security Monitor"               --notes-file release-notes.md               --latest
+            gh release upload wifi-phantom-v3 wifi-phantom-esp32c3-full.bin --clobber
+          else
+            gh release create wifi-phantom-v3 wifi-phantom-esp32c3-full.bin               --title "Wi-Fi Phantom v3.0.0 — ESP32-C3 Wireless Security Monitor"               --notes-file release-notes.md               --latest
+          fi
