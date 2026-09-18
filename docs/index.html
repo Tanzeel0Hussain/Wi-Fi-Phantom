@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Wi-Fi Phantom — ESP32-C3 defensive wireless security monitor and browser firmware installer.">
+  <title>Wi-Fi Phantom · ESP32-C3 Monitor</title>
+  <script type="module" src="https://unpkg.com/esp-web-tools@10.1.1/dist/web/install-button.js?module"></script>
+  <style>
+    :root{--bg:#050c13;--panel:#0d1a26;--panel2:#102536;--line:#20384d;--text:#edf7ff;--muted:#8da7ba;--cyan:#31d6e8;--green:#38d39f;--amber:#f7bd4b}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 18% 0,#123149 0,#050c13 44%);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}
+    .wrap{max-width:1120px;margin:auto;padding:28px 18px 70px}.nav{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:28px}.brand{font-weight:900}.nav a,.link{color:var(--cyan);text-decoration:none}
+    .hero{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}.card{background:rgba(13,26,38,.96);border:1px solid var(--line);border-radius:20px;box-shadow:0 20px 55px rgba(0,0,0,.18)}
+    .copy{padding:34px}.eyebrow{color:var(--cyan);font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;font-weight:900}.copy h1{font-size:clamp(2.1rem,5vw,3.7rem);line-height:1.02;letter-spacing:-.045em;margin:9px 0 16px}.copy p,.installer p,.feature p,.note{color:var(--muted);line-height:1.65}
+    .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}.chip{border:1px solid var(--line);border-radius:999px;padding:7px 10px;font-size:.74rem;color:#c4d3df}.installer{padding:28px;display:flex;flex-direction:column;justify-content:center}.installer h2{margin:8px 0}.installbox{margin:14px 0;padding:18px;background:#07131e;border:1px solid var(--line);border-radius:14px}
+    .actions{display:flex;gap:9px;flex-wrap:wrap}.btn{display:inline-block;padding:10px 13px;border-radius:10px;text-decoration:none;font-weight:800;font-size:.82rem}.primary{background:var(--cyan);color:#041014}.secondary{border:1px solid var(--line);color:#d8e6f0;background:#0c1a26}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}.feature{padding:21px}.feature h3{margin:7px 0}.steps{margin-top:16px;padding:25px}.stepgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:11px}.step{background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:15px}.step b{display:block;color:var(--cyan);font-size:.7rem;margin-bottom:7px}.step span{font-size:.8rem;line-height:1.5;color:#d5e1e9}
+    .warning{margin-top:16px;padding:17px 19px;background:#251c0d;border:1px solid #59451f;border-radius:14px;color:#e8cd96;font-size:.8rem;line-height:1.6}.footer{border-top:1px solid var(--line);margin-top:28px;padding-top:20px;display:flex;justify-content:space-between;gap:16px;color:var(--muted);font-size:.76rem}
+    @media(max-width:820px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.stepgrid{grid-template-columns:1fr 1fr}}@media(max-width:500px){.wrap{padding:18px 13px 45px}.copy,.installer,.steps{padding:20px}.stepgrid{grid-template-columns:1fr}.nav,.footer{align-items:flex-start;flex-direction:column}}
+  </style>
+</head>
+<body>
+<main class="wrap">
+  <nav class="nav"><div class="brand">Wi-Fi Phantom</div><a href="https://github.com/Tanzeel0Hussain/Wi-Fi-Phantom">View source</a></nav>
+
+  <section class="hero">
+    <article class="card copy">
+      <span class="eyebrow">ESP32-C3 · Defensive wireless monitoring</span>
+      <h1>Observe the Wi-Fi environment without disrupting it.</h1>
+      <p>Wi-Fi Phantom is a compact ESP32-C3 monitoring project that inventories nearby 2.4 GHz networks, highlights review-worthy changes, and serves a local dashboard without collecting credentials or disconnecting clients.</p>
+      <div class="chips"><span class="chip">ESP32-C3</span><span class="chip">Passive scanning</span><span class="chip">Duplicate SSID review</span><span class="chip">Local dashboard</span><span class="chip">Browser installer</span></div>
+    </article>
+
+    <aside class="card installer">
+      <span class="eyebrow">Device setup</span>
+      <h2>Install from your browser</h2>
+      <p>Connect a supported ESP32-C3 with a data-capable USB cable, approve the serial device, and install the current defensive firmware.</p>
+      <div class="installbox"><esp-web-install-button manifest="manifest.json"></esp-web-install-button></div>
+      <div class="actions">
+        <a class="btn primary" href="firmware/wifi-phantom-esp32c3-full.bin" download>Download firmware</a>
+        <a class="btn secondary" href="https://github.com/Tanzeel0Hussain/Wi-Fi-Phantom/releases">View releases</a>
+      </div>
+      <p class="note">Desktop Chrome or Edge is recommended. The browser will ask you to approve the serial device.</p>
+    </aside>
+  </section>
+
+  <section class="grid">
+    <article class="card feature"><h3>📡 Network inventory</h3><p>SSID, BSSID, channel, RSSI and advertised security mode are shown in the local dashboard.</p></article>
+    <article class="card feature"><h3>👻 Phantom observations</h3><p>Duplicate SSIDs and changes between scans are flagged for review without automatically declaring a network malicious.</p></article>
+    <article class="card feature"><h3>🛡️ Defensive by design</h3><p>The current firmware does not deauthenticate clients, clone third-party access points, or collect Wi-Fi passwords.</p></article>
+  </section>
+
+  <section class="card steps">
+    <h2>Quick start</h2>
+    <div class="stepgrid">
+      <div class="step"><b>01 · CONNECT</b><span>Attach the ESP32-C3 using a USB data cable.</span></div>
+      <div class="step"><b>02 · INSTALL</b><span>Use the installer above and approve the serial device.</span></div>
+      <div class="step"><b>03 · JOIN</b><span>Connect to <strong>Wi-Fi-Phantom-Monitor</strong> with password <strong>phantomsecure</strong>.</span></div>
+      <div class="step"><b>04 · OBSERVE</b><span>Open <strong>192.168.4.1</strong> and use Scan now.</span></div>
+    </div>
+  </section>
+
+  <div class="warning"><b>Authorized observation only.</b> Duplicate SSIDs can be legitimate on mesh, extender and enterprise networks. Treat dashboard flags as observations that require context, not proof of a rogue access point.</div>
+
+  <footer class="footer"><span>Wi-Fi Phantom · v3.0.0</span><span>Maintained by <a class="link" href="https://github.com/Tanzeel0Hussain">Tanzeel Hussain</a></span></footer>
+</main>
+</body>
+</html>
