@@ -1,0 +1,8 @@
+.pio/
+.vscode/
+.idea/
+*.log
+.DS_Store
+Thumbs.db
+*.bin
+!docs/firmware/*.bin
