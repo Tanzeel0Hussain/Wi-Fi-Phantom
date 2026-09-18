@@ -63,7 +63,18 @@ jobs:
             echo "Firmware binary is already current."
           else
             git commit -m "build: update browser-installable ESP32-C3 firmware [skip ci]"
-            git push
+            for attempt in 1 2 3; do
+              git fetch origin main
+              git rebase origin/main
+              if git push origin HEAD:main; then
+                break
+              fi
+              if [ "$attempt" -eq 3 ]; then
+                echo "Unable to publish generated firmware after 3 attempts."
+                exit 1
+              fi
+              sleep 2
+            done
           fi
 
       - name: Publish defensive firmware release
